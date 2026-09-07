@@ -87,8 +87,6 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This user is not registered. Please use Sign up first.")
     if not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
-    if user.active_session_token:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="This user is already signed in. Please log out before signing in again.")
     return create_session(user, db)
 
 

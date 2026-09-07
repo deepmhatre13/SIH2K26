@@ -5,9 +5,9 @@ import { LoginForm } from "@/components/login-form"
 
 export default function LoginPage() {
   useEffect(() => {
-    document.body.className = 'theme-dark';
+    document.body.className = 'theme-light';
     return () => {
-      document.body.className = 'theme-dark';
+      document.body.className = 'theme-light';
     };
   }, []);
 

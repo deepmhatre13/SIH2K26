@@ -22,8 +22,14 @@ export function ProtectedLayout() {
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
+export function PublicLayout() {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>Checking secure session...</div>;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />;
+}
+
 const router = createBrowserRouter([
-  { path: '/login', element: <LoginPage /> },
+  { element: <PublicLayout />, children: [{ path: '/login', element: <LoginPage /> }] },
   {
     element: <ProtectedLayout />,
     children: [{

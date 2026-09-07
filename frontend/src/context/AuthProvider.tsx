@@ -7,6 +7,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [userEmail, setUserEmail] = useState<string | null>(() => localStorage.getItem('paimana_user_email'));
   const [isLoading, setIsLoading] = useState(() => Boolean(localStorage.getItem('paimana_session')));
 
+  const clearSession = () => {
+    localStorage.removeItem('paimana_session');
+    localStorage.removeItem('paimana_user_email');
+    setUserEmail(null);
+    setIsAuthenticated(false);
+  };
+
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -38,36 +45,36 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     if (sessionToken) {
       void api.post('/auth/logout', null, { params: { session_token: sessionToken } });
     }
-    localStorage.removeItem('paimana_session');
-    localStorage.removeItem('paimana_user_email');
-    setUserEmail(null);
-    setIsAuthenticated(false);
+    clearSession();
   };
 
   useEffect(() => {
-    const sessionToken = localStorage.getItem('paimana_session');
-    if (!sessionToken) {
-      return;
-    }
+    const validateSession = async () => {
+      const sessionToken = localStorage.getItem('paimana_session');
+      if (!sessionToken) {
+        clearSession();
+        setIsLoading(false);
+        return;
+      }
 
-    api.get('/auth/me')
-      .then((response) => {
+      setIsLoading(true);
+      try {
+        const response = await api.get('/auth/me');
         const email = response.data.email as string;
         localStorage.setItem('paimana_user_email', email);
         setUserEmail(email);
         setIsAuthenticated(true);
-      })
-      .catch(() => {
-        localStorage.removeItem('paimana_session');
-        localStorage.removeItem('paimana_user_email');
-        setUserEmail(null);
-        setIsAuthenticated(false);
-      })
-      .finally(() => setIsLoading(false));
+      } catch {
+        clearSession();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void validateSession();
 
     const handleStorage = () => {
-      setIsAuthenticated(Boolean(localStorage.getItem('paimana_session')));
-      setUserEmail(localStorage.getItem('paimana_user_email'));
+      void validateSession();
     };
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);

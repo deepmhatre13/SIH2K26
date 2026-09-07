@@ -9,7 +9,6 @@ import { Bot } from 'lucide-react';
 import "tailwindcss";
 export const App: React.FC = () => {
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [projects, setProjects] = useState<Project[]>([]);
   const [alerts, setAlerts] = useState<EarlyWarningAlert[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -17,11 +16,6 @@ export const App: React.FC = () => {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [sectorFilter, setSectorFilter] = useState<SectorType | 'ALL'>('ALL');
   const [loading, setLoading] = useState(true);
-
-  // Synchronize theme with body class
-  useEffect(() => {
-    document.body.className = theme === 'dark' ? 'theme-dark' : 'theme-light';
-  }, [theme]);
 
   // Load initial data
   useEffect(() => {
@@ -91,8 +85,6 @@ export const App: React.FC = () => {
       {/* Top Header Navigation */}
       <Header
         alerts={alerts}
-        theme={theme}
-        setTheme={setTheme}
         onOpenCopilot={() => setIsCopilotOpen(true)}
       />
 

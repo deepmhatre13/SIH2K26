@@ -3,8 +3,6 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   ShieldAlert, 
   Activity, 
-  Sun, 
-  Moon, 
   Bell, 
   Layers, 
   TrendingUp, 
@@ -19,16 +17,12 @@ import { useAuth } from '../../context/authContext';
 
 interface HeaderProps {
   alerts: EarlyWarningAlert[];
-  theme: 'dark' | 'light';
-  setTheme: (theme: 'dark' | 'light') => void;
   onSearchSelect?: (projectId: string) => void;
   onOpenCopilot: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   alerts,
-  theme,
-  setTheme,
   onOpenCopilot
 }) => {
   const navigate = useNavigate();
@@ -265,25 +259,6 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            style={{
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-subtle)',
-              color: 'var(--text-primary)',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
-            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
         </div>
       </div>
 
