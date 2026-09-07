@@ -1,0 +1,21 @@
+{
+  "primary_horizon_months": 12,
+  "cost_target": {
+    "definition": "1 if latest_cost > original_cost at any fully-observed future report within 12 months of T, for projects not already overrun at T",
+    "eligibility_rule": "cost_calendar_eligible & cost_target_fully_observed & ~already_overrun_at_T",
+    "excluded_already_overrun_rows": 42118
+  },
+  "schedule_target": {
+    "definition": "1 if latest_commissioning moves to a later period at any fully-observed future report within 12 months of T",
+    "regime_start": "2021-01",
+    "regime_note": "Pre-2021 excluded: per-row commissioning-date update frequency itself trended up 10x from 2016-2024, causing informative-censoring-style inflation of the target near the panel edge and a measurement-intensity confound in earlier years. 2021+ chosen as the most stable of {2019,2020,2021} tested regimes; residual mild drift (8.9%->19.1% touch-rate, 2021-2024) remains and should be monitored.",
+    "eligibility_rule": "schedule_regime_eligible & schedule_calendar_eligible & schedule_target_fully_observed"
+  },
+  "split_boundaries": {
+    "train_end": "2021-12",
+    "validation_end": "2022-12",
+    "test_end": "2024-12",
+    "note": "scoring_only rows (report_date > test_end) held out for live inference only, never evaluated"
+  },
+  "generated_at_utc": "2026-09-06T15:54:34.887935+00:00"
+}
