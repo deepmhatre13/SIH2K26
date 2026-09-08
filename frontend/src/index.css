@@ -200,6 +200,14 @@ button, input, select, textarea {
 .login-mode-switch { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 18px; color: var(--text-tertiary); font-size: 0.74rem; }
 .login-mode-switch button { border: 0; padding: 0; background: transparent; color: var(--accent-cyan); font: inherit; font-weight: 800; cursor: pointer; }
 
+/* Google OAuth section on the login card */
+.login-divider { display: flex; align-items: center; gap: 10px; margin-top: 18px; color: var(--text-tertiary); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+.login-google-wrap { display: grid; place-items: center; margin-top: 12px; min-height: 40px; }
+.login-google-wrap iframe { width: 100% !important; }
+.login-google-fallback { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px 16px; border: 1px solid var(--border-medium); border-radius: 9999px; background: transparent; color: var(--text-primary); font: inherit; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: border-color var(--transition-fast), background var(--transition-fast); }
+.login-google-fallback:hover { background: var(--bg-card-hover); border-color: var(--border-highlight); }
+
 @media (max-width: 480px) {
   .login-page { padding: 24px 14px; }
   .login-card { padding: 24px 20px; }

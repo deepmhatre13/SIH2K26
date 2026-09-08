@@ -48,3 +48,21 @@
 48. Data Validation & Preprocessing — Cleans, validates, and prepares project data before ML prediction.
 49. Authentication & Role-Based Access — Provides secure access to project information and different system functionalities.
 50. End-to-End Decision Support — Combines data → ML prediction → risk detection → alert → recommendation → decision into one monitoring platform.
+
+## Google OAuth Sign-In
+
+The login page supports "Continue with Google" (Google Identity Services ID-token flow) alongside email/password.
+
+### One-time Google Cloud setup
+1. Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials) and create an **OAuth 2.0 Client ID** of type *Web application*.
+2. Add BOTH development origins to **Authorized JavaScript origins**: `http://localhost:5173` and `http://localhost:5174` (Vite falls back to 5174 when 5173 is busy). No **Authorized redirect URI** is needed — the GIS popup returns the ID token directly to the page; there is no server-side redirect/callback flow.
+3. Copy the generated client ID (it ends in `.apps.googleusercontent.com`).
+
+### Configuration
+- `frontend/.env` → `VITE_GOOGLE_CLIENT_ID=<your-client-id>` (see `frontend/.env.example`)
+- `backend/.env` → `GOOGLE_CLIENT_ID=<same-client-id>` (see `backend/.env.example`)
+
+The Google button is always visible on the login card. When the client ID is configured, it becomes the live official Google button; until then, clicking it shows setup guidance instead of failing silently.
+
+### Flow
+The Google button (loaded from `https://accounts.google.com/gsi/client`) returns a short-lived **ID token**, which the frontend POSTs to `POST /api/auth/google`. The backend verifies the token's signature, audience and expiry with `google-auth`, upserts the user, and returns the same session token used by password login — so session validation (`/api/auth/me`) and protected routes work unchanged.
